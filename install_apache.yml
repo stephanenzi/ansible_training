@@ -3,17 +3,51 @@
 - hosts: all
   become: true
   tasks:
-  
+
+############## Debian system config ###############
+
+# Update repository on all Debian system   
   - name: update repository index
     apt:
       update_cache: yes
+   # when: ansible_distribution == "Ubuntu"
+    when: ansible_distribution in ["Debian", "Ubuntu"]
 
+# Installing apache2 services on all Debian systems
   - name: install apache2 package
     apt:
       name: apache2
       state: latest
+   # when: ansible_distribution == "Ubuntu"
+    when: ansible_distribution in ["Debian", "Ubuntu"]
 
+# Update php support on all Debian systems
   - name: add php support for apache
     apt:
       name: libapache2-mod-php
       state: latest
+   # when: ansible_distribution == "Ubuntu"
+    when: ansible_distribution in ["Debian", "Ubuntu"]
+
+
+############### CentOS system config ################
+
+# Update repository on all CentOS system
+  - name: update repository index
+    dnf:
+      update_cache: yes
+    when: ansible_distribution_version == "CentOS"
+    
+# Installing apache2 services on all CentOS systems
+  - name: install apache2 package
+    dnf:
+      name: httpd
+      state: latest
+    when: ansible_distribution == "CentOS"
+    
+# Update php support on all CentOS systems
+  - name: php support for apache
+    dnf:
+      name: php
+      state: latest
+    when: ansible_distribution == "CentOS"
