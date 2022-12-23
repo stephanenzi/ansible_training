@@ -1,5 +1,5 @@
-10.18.13.155 ansible_user=user apache_package=apache2 php_package=libapache2-mod-php
-10.18.13.156 ansible_user=user apache_package=apache2 php_package=libapache2-mod-php
-10.18.13.157 ansible_user=user apache_package=apache2 php_package=libapache2-mod-php
-10.18.13.158 ansible_user=user apache_package=apache2 php_package=libapache2-mod-php
-10.18.13.159 ansible_user=user ansible_python_interpreter=/usr/bin/python3 apache_package=httpd php_package=php
+10.18.13.11 ansible_user=user apache_package=apache2 php_package=libapache2-mod-php
+10.18.13.12 ansible_user=user apache_package=apache2 php_package=libapache2-mod-php
+10.18.13.13 ansible_user=user apache_package=apache2 php_package=libapache2-mod-php
+10.18.13.14 ansible_user=user apache_package=apache2 php_package=libapache2-mod-php
+10.18.13.15 ansible_user=user ansible_python_interpreter=/usr/bin/python3 apache_package=httpd php_package=php
