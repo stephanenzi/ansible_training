@@ -1,5 +1,14 @@
-10.18.13.155 ansible_user=user
-10.18.13.156 ansible_user=user
-10.18.13.157 ansible_user=user
-10.18.13.158 ansible_user=user
-10.18.13.159 ansible_user=user ansible_python_interpreter=/usr/bin/python3
+[web_servers]
+10.18.13.155 
+10.18.13.159 # ansible_user=user #interpreter_python = /usr/bin/python
+10.18.13.156
+
+[db_servers]
+10.18.13.156 
+10.18.13.157 
+#10.18.13.159 # ansible_user=user #interpreter_python = /usr/bin/python
+
+[file_servers]
+10.18.13.158
+10.18.13.159 # ansible_user=user #interpreter_python = /usr/bin/python
+10.18.13.157

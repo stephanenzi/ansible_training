@@ -1,0 +1,85 @@
+---
+# install updates on all servers
+- hosts: all
+  become: true
+  remote_user: user
+  pre_tasks:
+
+  - name: install updates (CentOS)
+    tags: always
+    dnf:
+      update_only: yes
+      update_cache: yes
+    when: ansible_distribution == "CentOS"
+
+  - name: install updates (Ubuntu)
+    tags: always
+    apt:
+      update: dist
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu"
+
+
+
+# Installing apache2 services on web-servers
+
+- hosts: web_servers
+  become: true
+  remote_user: user
+  tasks:
+
+  - name: install apache and php packages
+    tags: apache,ubuntu
+    apt:
+      name: 
+        - apache2
+        - libapache2-mod-php
+      state: latest
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu"
+
+  - name: install apache2 package
+    tags: apache,centos
+    dnf:
+      name: 
+        - httpd
+        - php
+      state: latest
+      update_cache: yes
+    when: ansible_distribution == "CentOS"
+
+# Installing mariadb services on db-servers
+
+- hosts: db_servers
+  become: true
+  remote_user: user
+  tasks:
+
+  - name: install mariadb packages (Ubuntu)
+    tags: mariadb,ubuntu
+    apt:
+      name: mariadb-server
+      state: latest
+    when: ansible_distribution == "Ubuntu"
+
+
+  - name: install mariadb package (CentOS)
+    tags: mariadb,centos
+    dnf:
+      name: mariadb
+      state: latest
+    when: ansible_distribution == "CentOS"
+
+# install samba on all file-servers
+
+- hosts: file_servers
+  become: true
+  remote_user: user
+  tasks:
+
+  - name: install samba packages on all file_servers
+    tags: samba
+    package:
+      name: samba
+      state: latest
+
