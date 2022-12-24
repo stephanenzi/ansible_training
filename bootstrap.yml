@@ -1,0 +1,49 @@
+---
+# install updates on all servers
+- hosts: all
+  become: true
+#  remote_user: user
+  pre_tasks:
+
+  - name: install updates (CentOS)
+    tags: always
+    dnf:
+      update_only: yes
+      update_cache: yes
+    when: ansible_distribution == "CentOS"
+
+  - name: install updates (Ubuntu)
+    tags: always
+    apt:
+      update: dist
+      update_cache: yes
+    when: ansible_distribution == "Ubuntu"
+
+# creating new user on host machines
+
+- hosts: all
+  become: true
+#  remote_user: user
+  tasks:
+
+  - name: create a user called z103
+    tags: always
+    user:
+      name: z103
+      groups: root
+
+  - name: add ssh key for z103 to hosts
+    tags: always
+    authorized_key:
+      user: z103
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICiXOdaIm6isvAFdlGEVDBCaxeF9i4FsWUMUS5QKyTDw user@ansible-controller"
+
+  - name: add sudoers file for z103
+    tags: always
+    copy:
+      src: sudoer_z103
+      dest: /etc/sudoers.d/z103
+      owner: root
+      group: root
+      mode: 0440
+
