@@ -19,6 +19,35 @@
       update_cache: yes
     when: ansible_distribution == "Ubuntu"
 
+# creating new user on host machines
+
+- hosts: all
+  become: true
+  remote_user: user
+  tasks:
+
+  - name: create a user called z103
+    tags: always
+    user:
+      name: z103
+      groups: root
+
+  - name: add ssh key for z103 to hosts
+    tags: always
+    authorized_key:
+      user: z103
+      key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICiXOdaIm6isvAFdlGEVDBCaxeF9i4FsWUMUS5QKyTDw user@ansible-controller"
+
+  - name: add sudoers file for z103
+    tags: always
+    copy:
+      src: sudoer_z103
+      dest: /etc/sudoers.d/z103
+      owner: root
+      group: root
+      mode: 0440
+
+
 # install terraform on workstation
 - hosts: workstations
   become: true
@@ -76,16 +105,17 @@
 
        # change a line in a file or doc
   - name: change e-mail address for admin
-    tags: apache,centos,https
+    tags: apache,centos,httpd
     lineinfile:
       path: /etc/httpd/conf/httpd.conf
       regexp: '^ServerAdmin'
       line: ServerAdmin smooth@torengit.lab
     when: ansible_distribution == "CentOS"
+    register: httpd
 
        # restart httpd service on CentOS
-  - name: restart https services (CentOS)
-    tags: apache,centos,https
+  - name: restart httpd services (CentOS)
+    tags: apache,centos,httpd
     service:
       name: httpd
       state: restarted
