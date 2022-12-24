@@ -19,6 +19,7 @@
       update_cache: yes
     when: ansible_distribution == "Ubuntu"
 
+# install terraform on workstation
 - hosts: workstations
   become: true
   remote_user: user
@@ -38,12 +39,12 @@
       group: root
 
 # Installing apache2 services on web-servers
-
 - hosts: web_servers
   become: true
   remote_user: user
   tasks:
 
+       # install apache2 on ubuntu
   - name: install apache and php packages
     tags: apache,ubuntu
     apt:
@@ -53,7 +54,7 @@
       state: latest
       update_cache: yes
     when: ansible_distribution == "Ubuntu"
-
+       # install apache2 on linux
   - name: install apache2 package
     tags: apache,centos
     dnf:
@@ -64,6 +65,7 @@
       update_cache: yes
     when: ansible_distribution == "CentOS"
 
+       # start https services
   - name: start httpd services (CentOS)
     tags: centos,apache
     service:
@@ -72,8 +74,24 @@
       enabled: yes
     when: ansible_distribution == "CentOS"
 
-# copy default site files to web servers
+       # change a line in a file or doc
+  - name: change e-mail address for admin
+    tags: apache,centos,https
+    lineinfile:
+      path: /etc/httpd/conf/httpd.conf
+      regexp: '^ServerAdmin'
+      line: ServerAdmin smooth@torengit.lab
+    when: ansible_distribution == "CentOS"
 
+       # restart httpd service on CentOS
+  - name: restart https services (CentOS)
+    tags: apache,centos,https
+    service:
+      name: httpd
+      state: restarted
+    when: httpd.changed
+
+       # copy default site files to web servers
   - name: copy default html file for site
     tags: ubuntu,centos
     copy:
@@ -84,12 +102,12 @@
       mode: 0644
 
 # Installing mariadb services on db-servers
-
 - hosts: db_servers
   become: true
   remote_user: user
   tasks:
 
+       # install mariadb on unbuntu
   - name: install mariadb packages (Ubuntu)
     tags: mariadb,ubuntu
     apt:
@@ -97,7 +115,7 @@
       state: latest
     when: ansible_distribution == "Ubuntu"
 
-
+        # install mariadb on CentOS
   - name: install mariadb package (CentOS)
     tags: mariadb,centos
     dnf:
@@ -106,7 +124,6 @@
     when: ansible_distribution == "CentOS"
 
 # install samba on all file-servers
-
 - hosts: file_servers
   become: true
   remote_user: user
