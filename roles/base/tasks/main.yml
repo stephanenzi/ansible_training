@@ -1,0 +1,5 @@
+- name: add ssh public key for z103
+  authorized_key:
+    user: z103
+    key: "ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAICiXOdaIm6isvAFdlGEVDBCaxeF9i4FsWUMUS5QKyTDw user@ansible-controller"
+
