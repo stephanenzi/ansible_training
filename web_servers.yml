@@ -22,7 +22,15 @@
     regexp: '^ServerAdmin'
     line: ServerAdmin smooth@torengit.live
   when: ansible_distribution == "CentOS"
-  register: restart_apache
+  register: apache
+
+       # restart httpd service on CentOS
+- name: restart httpd services (CentOS)
+  tags: apache,centos,httpd
+  service:
+    name: "{{ apache_service }}"
+    state: restarted
+  when: apache.changed
 
        # copy default site files to web servers
 - name: copy default html file for site
@@ -33,4 +41,3 @@
     owner: root
     group: root
     mode: 0644
-
